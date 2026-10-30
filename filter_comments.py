@@ -9,7 +9,7 @@ def clean_comments(comments, max_comments=MAX_COMMENTS, min_severity=MIN_SEVERIT
             continue
         if SEVERITY_RANK[c["severity"]] < SEVERITY_RANK[min_severity]:
             continue
-        key = (c["file"], c["line"])
+        key = (c["file"], c["line"], c["rule"])
         if key not in best or SEVERITY_RANK[c["severity"]] > SEVERITY_RANK[best[key]["severity"]]:
             best[key] = c
     ranked = sorted(best.values(), key=lambda c: SEVERITY_RANK[c["severity"]], reverse=True)
@@ -23,5 +23,5 @@ if __name__ == "__main__":
         {"file": "a.py", "line": 9, "rule": "F401", "severity": "medium", "comment": "unused import"},
         {"file": "b.py", "line": 1, "rule": "F841", "severity": "low", "comment": "unused var"},
     ]
-    for c in clean_comments(fake, max_comments=2):
+    for c in clean_comments(fake, max_comments=10):
         print(c["file"], c["line"], c["severity"], c["rule"])

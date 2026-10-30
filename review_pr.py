@@ -16,6 +16,7 @@ TOKEN = os.environ["GITHUB_TOKEN"]
 REPO_NAME = os.environ.get("GITHUB_REPOSITORY", "1313rupinder/code_review_test")
 REPO_DIR = os.environ.get("GITHUB_WORKSPACE", "D:/code_review_test")
 DRY_RUN = os.environ.get("DRY_RUN", "true").lower() != "false"
+SKIP_RULES = {"B404"}
 
 def get_pr_number():
     event_path = os.environ.get("GITHUB_EVENT_PATH")
@@ -66,6 +67,7 @@ def main():
         if file.path.endswith(".py") and not file.is_removed_file:
             findings += run_ruff(file.path) + run_bandit(file.path)
     kept = keep_new_findings(findings, added)
+    kept = [f for f in kept if f["rule"] not in SKIP_RULES]
 
     existing = " ".join(c.body for c in pr.get_review_comments())
     fresh = [f for f in kept if marker_for(f) not in existing]
