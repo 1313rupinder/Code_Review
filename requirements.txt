@@ -1,0 +1,7 @@
+unidiff==1.0.1
+ruff==0.17.3
+bandit==1.9.4
+groq==1.7.0
+python-dotenv==1.2.4
+PyGithub==2.10.0
+requests==2.34.2
