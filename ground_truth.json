@@ -10,5 +10,15 @@
     ["utils.py", 6, "B602"],
     ["utils.py", 10, "B105"],
     ["utils.py", 11, "F841"]
+  ],
+  "3": [
+    ["payments.py", 2, "F401"],
+    ["payments.py", 6, "B105"],
+    ["payments.py", 10, "B301"],
+    ["payments.py", 14, "B324"],
+    ["payments.py", 18, "B608"],
+    ["payments.py", 24, "B113"],
+    ["payments.py", 29, "F841"],
+    ["payments.py", 30, "F821"]
   ]
 }
