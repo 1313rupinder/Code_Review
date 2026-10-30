@@ -1,0 +1,13 @@
+diff --git a/samples/app.py b/samples/app.py
+--- a/samples/app.py
++++ b/samples/app.py
+@@ -1,4 +1,8 @@
+ import os
+ def login(user, password):
+-    return True
++    secret = "admin123"
++    unused = 5
++    if password == secret:
++        return True
++    return False
+ print("done")

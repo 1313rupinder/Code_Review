@@ -1,0 +1,12 @@
+{
+  "action": "opened",
+  "number": 7,
+  "pull_request": {
+    "title": "Add login feature",
+    "head": { "sha": "abc123def456" },
+    "base": { "sha": "000111222333" }
+  },
+  "repository": {
+    "full_name": "rupinder/test-repo"
+  }
+}
