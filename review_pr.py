@@ -4,12 +4,9 @@ import subprocess
 import requests
 from dotenv import load_dotenv
 from github import Github, Auth
-from unidiff import PatchSet
 from filter_comments import clean_comments
-from filter_findings import get_added_lines, keep_new_findings
 from review_finding import review_finding
-from run_checks import run_ruff, run_bandit
-from settings import SKIP_RULES
+from pipeline import added_from_diff, find_new_findings
 
 load_dotenv()
 
@@ -56,18 +53,10 @@ def main():
         raise SystemExit("Checked-out code is not the PR head commit. Stopping.")
 
     diff_text = fetch_pr_diff(pr_number)
-    diff_path = os.path.abspath("pr.diff")
-    with open(diff_path, "w", encoding="utf-8", newline="") as f:
-        f.write(diff_text)
-    added = get_added_lines(diff_path)
+    added = added_from_diff(diff_text)
 
     os.chdir(REPO_DIR)
-    findings = []
-    for file in PatchSet(diff_text):
-        if file.path.endswith(".py") and not file.is_removed_file:
-            findings += run_ruff(file.path) + run_bandit(file.path)
-    kept = keep_new_findings(findings, added)
-    kept = [f for f in kept if f["rule"] not in SKIP_RULES]
+    findings, kept = find_new_findings(added)
 
     existing = " ".join(c.body for c in pr.get_review_comments())
     fresh = [f for f in kept if marker_for(f) not in existing]
