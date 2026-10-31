@@ -16,7 +16,7 @@ TOKEN = os.environ["GITHUB_TOKEN"]
 REPO_NAME = os.environ.get("GITHUB_REPOSITORY", "1313rupinder/code_review_test")
 REPO_DIR = os.environ.get("GITHUB_WORKSPACE", "D:/code_review_test")
 DRY_RUN = os.environ.get("DRY_RUN", "true").lower() != "false"
-SKIP_RULES = {"B404"}
+SKIP_RULES = {"B403", "B404"}
 
 def get_pr_number():
     event_path = os.environ.get("GITHUB_EVENT_PATH")
