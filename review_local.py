@@ -1,11 +1,9 @@
 import argparse
 import os
 import subprocess
-from unidiff import PatchSet
 from filter_comments import clean_comments
-from filter_findings import keep_new_findings
-from run_checks import run_ruff, run_bandit
-from settings import SKIP_RULES, SKIP_DIRS, MAX_MODEL_CALLS, MAX_COMMENTS
+from pipeline import added_from_diff, find_new_findings
+from settings import SKIP_DIRS, MAX_MODEL_CALLS, MAX_COMMENTS
 
 def run_git(repo, *args):
     result = subprocess.run(
@@ -19,19 +17,6 @@ def run_git(repo, *args):
 def all_lines(repo, rel_path):
     with open(os.path.join(repo, rel_path), encoding="utf-8", errors="replace") as f:
         return set(range(1, sum(1 for _ in f) + 1))
-
-def added_from_diff(diff_text):
-    added = {}
-    for file in PatchSet(diff_text):
-        if file.is_removed_file or not file.path.endswith(".py"):
-            continue
-        lines = set()
-        for hunk in file:
-            for line in hunk:
-                if line.is_added:
-                    lines.add(line.target_line_no)
-        added[file.path] = lines
-    return added
 
 def git_mode(repo, base):
     diff_text = run_git(repo, "diff", base, "--relative", "--no-color")
@@ -82,11 +67,7 @@ def main():
         print("No Python files to review.")
         return
 
-    findings = []
-    for rel in sorted(added):
-        findings += run_ruff(rel) + run_bandit(rel)
-    kept = keep_new_findings(findings, added)
-    kept = [f for f in kept if f["rule"] not in SKIP_RULES]
+    findings, kept = find_new_findings(added)
     print(f"{len(added)} file(s), {len(findings)} findings, {len(kept)} on changed lines")
 
     if args.no_llm:
