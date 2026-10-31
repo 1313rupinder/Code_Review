@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 from github import Github, Auth
 from filter_comments import clean_comments
 from review_finding import review_finding
-from pipeline import added_from_diff, find_new_findings
+from pipeline import added_from_diff, find_new_findings, limit_findings
+from settings import MAX_MODEL_CALLS
 
 load_dotenv()
 
@@ -62,7 +63,11 @@ def main():
     fresh = [f for f in kept if marker_for(f) not in existing]
     print(f"PR #{pr_number}: {len(findings)} findings, {len(kept)} on changed lines, {len(fresh)} not yet posted")
 
-    comments = clean_comments([review_finding(f) for f in fresh])
+    to_review, skipped = limit_findings(fresh, MAX_MODEL_CALLS)
+    if skipped:
+        print(f"Too many findings: reviewing {len(to_review)}, skipping {skipped} (limit {MAX_MODEL_CALLS}).")
+
+    comments = clean_comments([review_finding(f) for f in to_review])
     to_post = []
     for c in comments:
         marker = f"<!-- copilot:{c['rule']}:{c['file']}:{c['line']} -->"
