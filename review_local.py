@@ -5,10 +5,7 @@ from unidiff import PatchSet
 from filter_comments import clean_comments
 from filter_findings import keep_new_findings
 from run_checks import run_ruff, run_bandit
-
-SKIP_RULES = {"B403", "B404"}
-SKIP_DIRS = {".git", "Hii", "venv", ".venv", "__pycache__", ".ruff_cache", "node_modules"}
-MAX_MODEL_CALLS = 25
+from settings import SKIP_RULES, SKIP_DIRS, MAX_MODEL_CALLS, MAX_COMMENTS
 
 def run_git(repo, *args):
     result = subprocess.run(
@@ -70,7 +67,7 @@ def main():
     parser.add_argument("paths", nargs="*", help="files or folders to review in full; leave empty to review git changes")
     parser.add_argument("--repo", default=".", help="folder to work in (default: current folder)")
     parser.add_argument("--base", default="HEAD", help="git mode: compare against this commit or branch")
-    parser.add_argument("--max", type=int, default=10, help="most comments to show")
+    parser.add_argument("--max", type=int, default=MAX_COMMENTS, help="most comments to show")
     parser.add_argument("--no-llm", action="store_true", help="show tool findings only, no model call")
     parser.add_argument("--report", help="also write the comments to this Markdown file")
     parser.add_argument("--force", action="store_true", help="allow more than 25 model calls")

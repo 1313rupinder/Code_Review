@@ -1,6 +1,4 @@
-SEVERITY_RANK = {"high": 3, "medium": 2, "low": 1}
-MAX_COMMENTS = 10
-MIN_SEVERITY = "low"
+from settings import SEVERITY_RANK, MAX_COMMENTS, MIN_SEVERITY
 
 def clean_comments(comments, max_comments=MAX_COMMENTS, min_severity=MIN_SEVERITY):
     best = {}

@@ -6,9 +6,10 @@ from groq import Groq
 from build_prompt import build_prompt, get_code_context
 from filter_findings import get_added_lines, keep_new_findings
 from run_checks import run_ruff, run_bandit
+from settings import MODEL, SECRET_RULES
 
 load_dotenv()
-MODEL = "openai/gpt-oss-120b"
+
 client = Groq(api_key=os.environ["GROQ_API_KEY"])
 
 FORMAT_RULES = (
@@ -43,9 +44,7 @@ def parse_reply(text):
         return None
     return {"severity": data["severity"], "comment": data["comment"].strip()}
 
-SECRET_RULES = {"B105", "B106", "B107"}
 QUOTED = re.compile(r"""(["'])(.+?)\1""")
-
 
 def get_secret_values(file_path, start_line, end_line):
     with open(file_path, encoding="utf-8") as f:
@@ -57,7 +56,6 @@ def get_secret_values(file_path, start_line, end_line):
             if len(value) >= 4:
                 secrets.append(value)
     return secrets
-
 
 def redact(text, secrets):
     for value in secrets:
