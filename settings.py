@@ -8,3 +8,6 @@ SECRET_RULES = {"B105", "B106", "B107"}
 SKIP_DIRS = {".git", "Hii", "venv", ".venv", "__pycache__", ".ruff_cache", "node_modules"}
 
 MODEL = "openai/gpt-oss-120b"
+
+MODEL_TIMEOUT_SECONDS = 60
+MODEL_MAX_RETRIES = 3
