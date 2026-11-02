@@ -20,5 +20,13 @@
     ["payments.py", 24, "B113"],
     ["payments.py", 29, "F841"],
     ["payments.py", 30, "F821"]
+  ],
+  "4": [
+    ["accounts.py", 3, "F401"],
+    ["accounts.py", 10, "B311"],
+    ["accounts.py", 14, "B608"],
+    ["accounts.py", 19, "B306"],
+    ["accounts.py", 29, "B110"],
+    ["accounts.py", 23, "LOGIC"]
   ]
 }
