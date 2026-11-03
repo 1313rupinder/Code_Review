@@ -30,8 +30,9 @@ def score(pr_number, expected):
     return tp, fp, fn, precision, recall
 
 if __name__ == "__main__":
-    with open("ground_truth.json", encoding="utf-8") as f:
-        truth = json.load(f)
+    key_path = os.path.join(os.path.dirname(__file__), "ground_truth.json")
+    with open(key_path, encoding="utf-8") as f:
+         truth = json.load(f)
 
     all_tp = all_posted = all_expected = 0
     for number, expected in truth.items():
