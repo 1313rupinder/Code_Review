@@ -34,5 +34,13 @@
     ["ledger.py", 10, "B105"],
     ["ledger.py", 41, "B506"],
     ["ledger.py", 45, "LOGIC"]
+  ],
+  "6": [
+    ["tools.py", 5, "F401"],
+    ["tools.py", 10, "B105"],
+    ["tools.py", 19, "B602"],
+    ["tools.py", 47, "B501"],
+    ["tools.py", 51, "F632"],
+    ["tools.py", 57, "LOGIC"]
   ]
 }
