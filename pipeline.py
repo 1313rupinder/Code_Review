@@ -1,7 +1,7 @@
 from unidiff import PatchSet
 from filter_findings import keep_new_findings
 from run_checks import run_ruff, run_bandit
-from settings import SKIP_RULES
+from settings import SKIP_RULES, SKIP_RULES_IN_TESTS
 
 def added_from_diff(diff_text):
     added = {}
@@ -16,8 +16,26 @@ def added_from_diff(diff_text):
         added[file.path] = lines
     return added
 
+def is_test_file(path):
+    parts = path.split("/")
+    name = parts[-1]
+    return (
+        "tests" in parts[:-1]
+        or "test" in parts[:-1]
+        or name.startswith("test_")
+        or name.endswith("_test.py")
+        or name == "conftest.py"
+    )
+
 def drop_skipped(findings):
-    return [f for f in findings if f["rule"] not in SKIP_RULES]
+    kept = []
+    for f in findings:
+        if f["rule"] in SKIP_RULES:
+            continue
+        if f["rule"] in SKIP_RULES_IN_TESTS and is_test_file(f["file"]):
+            continue
+        kept.append(f)
+    return kept
 
 def find_new_findings(added):
     findings = []
