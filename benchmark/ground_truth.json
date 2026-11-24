@@ -44,8 +44,8 @@
     ["tools.py", 57, "LOGIC"]
   ],
   "7": [
-    ["guide_test.py", 4, "B105"],
-    ["guide_test.py", 8, "B608"],
-    ["guide_test.py", 12, "B113"]
+    ["guide_test.py", 3, "B105"],
+    ["guide_test.py", 7, "B608"],
+    ["guide_test.py", 13, "B113"]
     ]
 }
