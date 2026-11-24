@@ -1,6 +1,7 @@
 import json
 import os
 import re
+from style_guide import rules_for
 from functools import lru_cache
 from dotenv import load_dotenv
 from groq import Groq
@@ -69,7 +70,7 @@ def redact(text, secrets):
         text = text.replace(value, "<redacted>")
     return text
 
-def review_finding(finding):
+def review_finding(finding, guide_rules=()):
     secrets = []
     if finding["rule"] in SECRET_RULES:
         secrets = get_secret_values(finding["file"], finding["start_line"], finding["end_line"])
@@ -81,7 +82,7 @@ def review_finding(finding):
         get_code_context(finding["file"], finding["start_line"], finding["end_line"]),
         secrets,
     ))
-    prompt = build_prompt(safe_finding, context) + FORMAT_RULES
+    prompt = build_prompt(safe_finding, context, rules=rules_for(finding, guide_rules)) + FORMAT_RULES
     try:
         raw = ask_model(prompt)
     except Exception as error:

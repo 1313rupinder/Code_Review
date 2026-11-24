@@ -9,7 +9,13 @@ def get_code_context(file_path, start_line, end_line, padding=3):
     return "\n".join(numbered)
 
 
-def build_prompt(finding, context):
+def build_prompt(finding, context, rules=()):
+    rule_text = ""
+    if rules:
+        rule_text = "Team rules for this finding (follow them in your fix):\n"
+        for r in rules:
+            rule_text += f"- {r['title']}: {r['text']}\n"
+        rule_text += "\n"
     return (
         "You are a code reviewer. Write a short review comment for the finding below.\n"
         "Rules: at most 2 sentences. Explain the problem and suggest a fix. "
@@ -17,5 +23,6 @@ def build_prompt(finding, context):
         f"Tool: {finding['source']} ({finding['rule']})\n"
         f"Message: {finding['message']}\n"
         f"Lines: {finding['start_line']}-{finding['end_line']}\n\n"
+        f"{rule_text}"
         f"Code:\n{context}\n"
     )
