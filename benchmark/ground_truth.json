@@ -47,5 +47,10 @@
     ["guide_test.py", 3, "B105"],
     ["guide_test.py", 7, "B608"],
     ["guide_test.py", 13, "B113"]
-    ]
+  ],
+  "8": [
+    ["guide_test2.py", 3, "B105"],
+    ["guide_test2.py", 7, "B608"],
+    ["guide_test2.py", 13, "B113"]
+  ]
 }
