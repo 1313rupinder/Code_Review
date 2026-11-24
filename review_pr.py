@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from github import Github, Auth
 from filter_comments import clean_comments
 from review_finding import review_finding
+from style_guide import load_guide_text, parse_guide
 from pipeline import added_from_diff, find_new_findings, limit_findings
 from settings import MAX_MODEL_CALLS
 
@@ -48,6 +49,8 @@ def main():
     g = Github(auth=Auth.Token(TOKEN))
     repo = g.get_repo(REPO_NAME)
     pr = repo.get_pull(pr_number)
+    guide_rules = parse_guide(load_guide_text(repo, pr.base.ref))
+    print(f"Style guide: {len(guide_rules)} rule(s) from {pr.base.ref}")
     head_sha = pr.head.sha
 
     if get_local_head_sha() != head_sha:
@@ -67,7 +70,7 @@ def main():
     if skipped:
         print(f"Too many findings: reviewing {len(to_review)}, skipping {skipped} (limit {MAX_MODEL_CALLS}).")
 
-    comments = clean_comments([review_finding(f) for f in to_review])
+    comments = clean_comments([review_finding(f, guide_rules) for f in to_review])
     to_post = []
     for c in comments:
         marker = f"<!-- copilot:{c['rule']}:{c['file']}:{c['line']} -->"
