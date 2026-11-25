@@ -47,3 +47,6 @@ def find_new_findings(added):
 def limit_findings(findings, max_calls):
     ranked = sorted(findings, key=lambda f: (f["source"] != "bandit", f["file"], f["start_line"]))
     return ranked[:max_calls], max(0, len(ranked) - max_calls)
+
+def is_fork(pr):
+    return pr.head.repo is None or pr.head.repo.full_name != pr.base.repo.full_name

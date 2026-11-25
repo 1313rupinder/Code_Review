@@ -7,7 +7,7 @@ from github import Github, Auth
 from filter_comments import clean_comments
 from review_finding import review_finding
 from style_guide import load_guide_text, parse_guide
-from pipeline import added_from_diff, find_new_findings, limit_findings
+from pipeline import added_from_diff, find_new_findings, limit_findings, is_fork
 from settings import MAX_MODEL_CALLS
 
 load_dotenv()
@@ -49,6 +49,9 @@ def main():
     g = Github(auth=Auth.Token(TOKEN))
     repo = g.get_repo(REPO_NAME)
     pr = repo.get_pull(pr_number)
+    if is_fork(pr):
+        print("This PR comes from a fork. GitHub gives fork PRs no secrets, so the review is skipped.")
+        return
     guide_rules = parse_guide(load_guide_text(repo, pr.base.ref))
     print(f"Style guide: {len(guide_rules)} rule(s) from {pr.base.ref}")
     head_sha = pr.head.sha
