@@ -30,3 +30,6 @@ Team-rule test: with specific rules the comments changed from `os.getenv`, `%s`,
 - PRs from forks fail (GitHub gives them no secrets).
 - Only added lines are checked. B603, B607, B403, B404 are skipped everywhere.
 - Team rules only cover codes listed in `rules:` lines.
+- B311 (`random`) is skipped, so weak random numbers used for tokens go unreported.
+- Folders containing `pyvenv.cfg` (virtual environments) are skipped in local mode, whatever their name.
+- Out-of-sample check on one real script (9 findings): 8 were false alarms (fake-data `random`), and the B105 was most likely a dummy password. Precision on planted files (0.89 to 1.00) does not carry over to real code.
