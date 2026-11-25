@@ -2,6 +2,7 @@ import argparse
 import os
 import subprocess
 from filter_comments import clean_comments
+from review_finding import safe_message
 from pipeline import added_from_diff, find_new_findings
 from settings import SKIP_DIRS, MAX_MODEL_CALLS, MAX_COMMENTS
 
@@ -72,7 +73,7 @@ def main():
 
     if args.no_llm:
         for f in sorted(kept, key=lambda f: (f["file"], f["start_line"])):
-            print(f'{f["file"]}:{f["start_line"]}  [{f["source"]}:{f["rule"]}]  {f["message"]}')
+            print(f'{f["file"]}:{f["start_line"]}  [{f["source"]}:{f["rule"]}]  {safe_message(f)}')
         return
 
     if len(kept) > MAX_MODEL_CALLS and not args.force:

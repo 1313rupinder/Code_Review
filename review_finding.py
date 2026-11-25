@@ -99,3 +99,9 @@ def review_finding(finding, guide_rules=()):
         "severity": reply["severity"],
         "comment": redact_secret_like(redact(reply["comment"], secrets)),
     }
+
+def safe_message(finding):
+    secrets = []
+    if finding["rule"] in SECRET_RULES:
+        secrets = get_secret_values(finding["file"], finding["start_line"], finding["end_line"])
+    return redact_secret_like(redact(finding["message"], secrets))
