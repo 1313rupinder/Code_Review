@@ -1,5 +1,5 @@
 def get_code_context(file_path, start_line, end_line, padding=3):
-    with open(file_path) as f:
+    with open(file_path, encoding = "utf-8", errors = "replace") as f:
         lines = f.read().splitlines()
     first = max(1, start_line - padding)
     last = min(len(lines), end_line + padding)
