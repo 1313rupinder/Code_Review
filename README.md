@@ -33,3 +33,4 @@ Team-rule test: with specific rules the comments changed from `os.getenv`, `%s`,
 - B311 (`random`) is skipped, so weak random numbers used for tokens go unreported.
 - Folders containing `pyvenv.cfg` (virtual environments) are skipped in local mode, whatever their name.
 - Out-of-sample check on one real script (9 findings): 8 were false alarms (fake-data `random`), and the B105 was most likely a dummy password. Precision on planted files (0.89 to 1.00) does not carry over to real code.
+- Fork PRs are skipped with a message. This is covered by unit tests only; a real fork PR was not tested.
