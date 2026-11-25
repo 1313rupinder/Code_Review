@@ -34,7 +34,11 @@ def files_mode(repo, paths):
         found = []
         if os.path.isdir(full):
             for folder, dirs, names in os.walk(full):
-                dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+                dirs[:] = [
+                    d for d in dirs
+                    if d not in SKIP_DIRS
+                    and not os.path.exists(os.path.join(folder, d, "pyvenv.cfg"))
+                ]
                 found += [os.path.join(folder, n) for n in names if n.endswith(".py")]
         elif os.path.isfile(full) and full.endswith(".py"):
             found.append(full)
